@@ -1,10 +1,10 @@
-The folder contains the synthetic data generated from implicit numerical integration of the WG model in the principal space.
+The folder contains the synthetic data generated from implicit numerical integration of the WG model in the principal stress/strain space.
 
 Data is normalized between -1.0 and 1.0.
 
-Data is stored as mXn tensor where m is the number of samples and n is the number of features
+Data is stored as mXn tensor where m is the number of samples and n is the number of features.
 
-The 'X' label contains the input data and the 'y' label contains the output data.
+'X' label contains the input data; 'y' label contains the output data; 'minx' and 'miny' labels contain the 'X' and 'y' minimums over all samples; 'rangex' and 'rangey' labels contain the 'X' and 'y' range (max - min) over all samples.
 
 dstate.X and dstress.X are mX13 tensors containing void ratio(1), stress(3), plastic strain(3), strain(3) and strain increment(3).
 
