@@ -99,6 +99,10 @@ def mainfunc(nneurons,  itrain, irepeat, device, data_train_state, data_train_st
     optimizer_state1 = optim.Adam(n1_state1.parameters(), lr=0.001)
     optimizer_state2 = optim.Adam(n1_state2.parameters(), lr=0.001)
     optimizer_ratio = optim.Adam([gkratio], lr=0.001)
+    scheduler_stress = optim.lr_scheduler.ExponentialLR(optimizer_stress, gamma=0.97)
+    scheduler_state1 = optim.lr_scheduler.ExponentialLR(optimizer_state1, gamma=0.97)
+    scheduler_state2 = optim.lr_scheduler.ExponentialLR(optimizer_state2, gamma=0.97)
+    scheduler_ratio = optim.lr_scheduler.ExponentialLR(optimizer_ratio, gamma=0.97)
 
     # ==================== train EPNN
     if_train_plot = True
@@ -106,6 +110,7 @@ def mainfunc(nneurons,  itrain, irepeat, device, data_train_state, data_train_st
 
     nepochs_train = 10000  # number of training epochs
     save_every = 10000  # save the outputs in every save_every epochs
+    sched_freq = 100000  # learning update frequency
 
     n1_state1, n1_state2, n1_stress = main.trainAnn(model11=n1_state1, model12=n1_state2, model2=n1_stress,
                                                     data1=data_train_state, data2=data_train_stress,
@@ -118,4 +123,7 @@ def mainfunc(nneurons,  itrain, irepeat, device, data_train_state, data_train_st
                                                     min2=min_stress, range1=range_state, range2=range_stress,
                                                     min3=min_dstrain, range3=range_dstrain, device=device,
                                                     param=gkratio, optimizer_param=optimizer_ratio, nneurons=nneurons,
-                                                    itrain=itrain, irepeat=irepeat, nhlayers=nhlayers1)
+                                                    itrain=itrain, irepeat=irepeat, nhlayers=nhlayers1,
+                                                    scheduler11=scheduler_state1, scheduler12=scheduler_state2,
+                                                    scheduler2=scheduler_stress, scheduler_param=scheduler_ratio,
+                                                    sched_freq=sched_freq)

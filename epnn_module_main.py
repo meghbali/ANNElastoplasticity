@@ -68,7 +68,8 @@ def datapp(data, train_p, cv_p, test_p):
 
 def trainAnn(model11, model12, model2, data1, data2, datacv1, datacv2, criterion, optimizer11, optimizer12,
              optimizer2, epochs, datatest1, datatest2, ifsave, saveevery, ifplot, min1, min2, range1, range2,
-             min3, range3, device, param, optimizer_param, nneurons, itrain, irepeat, nhlayers):
+             min3, range3, device, param, optimizer_param, nneurons, itrain, irepeat, nhlayers,
+             scheduler11, scheduler12, scheduler2, scheduler_param, sched_freq):
 
     # predictions pre-training
     train_error11, train_error12, train_error2 = util.pred_error(model11, model12, model2, data1, data2, criterion,
@@ -91,9 +92,8 @@ def trainAnn(model11, model12, model2, data1, data2, datacv1, datacv2, criterion
     model12.train()
     model2.train()
     trends = np.zeros((0, 7))
-    kounter = 0
-    kounter3 = 0
-    kounter2 = 0
+    lrs = np.zeros((0, 4))
+    kounter, kounter2, kounter3, kounter4 = 0, 0, 0, 0
     for e in range(epochs):
         optimizer11.zero_grad()
         optimizer12.zero_grad()
@@ -106,6 +106,20 @@ def trainAnn(model11, model12, model2, data1, data2, datacv1, datacv2, criterion
         optimizer12.step()
         optimizer2.step()
         optimizer_param.step()
+        learning_rate11 = optimizer11.param_groups[0]['lr']
+        learning_rate12 = optimizer12.param_groups[0]['lr']
+        learning_rate2 = optimizer2.param_groups[0]['lr']
+        learning_param = optimizer_param.param_groups[0]['lr']
+
+        lrs = np.append(lrs, np.array([[learning_rate11, learning_rate12, learning_rate2, learning_param]]), 0)
+
+        kounter4 += 1
+        if kounter4 == sched_freq:
+            scheduler11.step()
+            scheduler12.step()
+            scheduler2.step()
+            scheduler_param.step()
+            kounter4 = 0
 
         print(f"epoch: {e + 1}")
         print(f"Training losses: {cost.item(), cost11.item(), cost12.item(), cost2.item()}")
@@ -146,6 +160,10 @@ def trainAnn(model11, model12, model2, data1, data2, datacv1, datacv2, criterion
             util.data_dumper_dat(file_name='trends_train_' + str(e+1) + '_' + str(nneurons) + '_'
                                            + str(itrain) + '_' + str(irepeat) + '_' + str(nhlayers)
                                            + '.dat', outputset=trends)
+
+            util.data_dumper_dat(file_name='lrs_' + str(e + 1) + '_' + str(nneurons) + '_'
+                                           + str(itrain) + '_' + str(irepeat) + '_' + str(nhlayers)
+                                           + '.dat', outputset=lrs)
             kounter3 = 0
 
         kounter2 += 1

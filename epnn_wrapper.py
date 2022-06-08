@@ -51,38 +51,33 @@ if if_gpu:
 # load state data
 get_data = util.data_loader_dat(file_name='data_set/dstate-16-plas.dat')
 XX = torch.from_numpy(get_data['X'])
-X = XX.to(device)
 yy = torch.from_numpy(get_data['y'])
-y = yy.to(device)
+X, y = XX.to(device), yy.to(device)
 
 # create data object for state variables
 data_state = cls.Data(x=X, y=y)
 
 # extract additional variables from state data
 min_state = torch.from_numpy(get_data['miny'])
-min_state = min_state.to(device)
 range_state = torch.from_numpy(get_data['rangey'])
-range_state = range_state.to(device)
 min_dstrain = torch.from_numpy(get_data['minx'][10:])
-min_dstrain = min_dstrain.to(device)
 range_dstrain = torch.from_numpy(get_data['rangex'][10:])
-range_dstrain = range_dstrain.to(device)
+min_state, range_state, min_dstrain, range_dstrain = min_state.to(device), range_state.to(device), \
+                                                     min_dstrain.to(device),  range_dstrain.to(device)
 
 # load stress data
 get_data = util.data_loader_dat(file_name='data_set/dstress-16-plas.dat')
 XX = torch.from_numpy(get_data['X'])
-X = XX.to(device)
 yy = torch.from_numpy(get_data['y'])
-y = yy.to(device)
+X, y = XX.to(device), yy.to(device)
 
 # create data object for stress
 data_stress = cls.Data(x=X, y=y)
 
 # extract additional variables from stress data
 min_stress = torch.from_numpy(get_data['miny'])
-min_stress = min_stress.to(device)
 range_stress = torch.from_numpy(get_data['rangey'])
-range_stress = range_stress.to(device)
+min_stress, range_stress = min_stress.to(device), range_stress.to(device)
 
 # ========= create training, cross-validation and test sets from data
 data_train_state1, data_cv_state, data_test_state = mmain.datapp(data=data_state, train_p=0.6, cv_p=0.2, test_p=0.2)
