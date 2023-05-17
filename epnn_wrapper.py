@@ -49,7 +49,7 @@ if if_gpu:
 
 # ========= load data to device (refer to the readme file for dataset for details)
 # load state data
-get_data = util.data_loader_dat(file_name='data_set/dstate-16-plas.dat')
+get_data = util.data_loader_dat(file_name='Datasets/WG/dstate-16-plas.dat')
 XX = torch.from_numpy(get_data['X'])
 yy = torch.from_numpy(get_data['y'])
 X, y = XX.to(device), yy.to(device)
@@ -66,7 +66,7 @@ min_state, range_state, min_dstrain, range_dstrain = min_state.to(device), range
                                                      min_dstrain.to(device),  range_dstrain.to(device)
 
 # load stress data
-get_data = util.data_loader_dat(file_name='data_set/dstress-16-plas.dat')
+get_data = util.data_loader_dat(file_name='Datasets/WG/dstress-16-plas.dat')
 XX = torch.from_numpy(get_data['X'])
 yy = torch.from_numpy(get_data['y'])
 X, y = XX.to(device), yy.to(device)

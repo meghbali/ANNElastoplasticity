@@ -64,13 +64,14 @@ def mainfunc(nneurons,  itrain, irepeat, device, data_train_state, data_train_st
     # choose the activation function
     # nn.Sigmoid(), nn.Tanh(), nn.LogSigmoid(), nn.ReLU(), nn.LeakyReLU(), nn.ELU(), nn.Softmax(dim=1),
     # nn.LogSoftmax(dim=1), nn.Linear()
-    active_func = nn.LeakyReLU()
-    ann_active_func1 = nn.ModuleList([active_func])
-    ann_active_func2 = nn.ModuleList([active_func])
-    ann_active_func1.extend([active_func for ii in range(nhlayers1)])
-    ann_active_func2.extend([active_func for ii in range(nhlayers2)])
-    ann_active_func1.extend([active_func])
-    ann_active_func2.extend([active_func])
+    active_func1 = nn.LeakyReLU()
+    active_func2 = nn.LeakyReLU()
+    ann_active_func1 = nn.ModuleList([active_func1])
+    ann_active_func2 = nn.ModuleList([active_func2])
+    ann_active_func1.extend([active_func1 for ii in range(nhlayers1)])
+    ann_active_func2.extend([active_func2 for ii in range(nhlayers2)])
+    ann_active_func1.extend([active_func1])
+    ann_active_func2.extend([active_func2])
 
     # use dropout only for hidden layers. 0.0 means no dropout
     ann_drop_p = 0.0
@@ -110,7 +111,7 @@ def mainfunc(nneurons,  itrain, irepeat, device, data_train_state, data_train_st
 
     nepochs_train = 10000  # number of training epochs
     save_every = 10000  # save the outputs in every save_every epochs
-    sched_freq = 100000  # learning update frequency
+    sched_freq = 10000000  # learning update frequency
 
     n1_state1, n1_state2, n1_stress = main.trainAnn(model11=n1_state1, model12=n1_state2, model2=n1_stress,
                                                     data1=data_train_state, data2=data_train_stress,

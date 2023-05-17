@@ -60,8 +60,8 @@ def datapp(data, train_p, cv_p, test_p):
     # choose test data portion
     n_test_portion = test_p
     n_test = math.floor(n_test_portion * data.n_samples)
-    data_test = cls.Data(x=data.x[shuffled_indices[(n_train + n_cv):-1]],
-                         y=data.y[shuffled_indices[(n_train + n_cv):-1]])
+    data_test = cls.Data(x=data.x[shuffled_indices[(n_train + n_cv):(n_train + n_cv + n_test)]],
+                         y=data.y[shuffled_indices[(n_train + n_cv):(n_train + n_cv + n_test)]])
 
     return data_train, data_cv, data_test
 
@@ -191,7 +191,7 @@ def trainAnn(model11, model12, model2, data1, data2, datacv1, datacv2, criterion
 
 
 def load_checkpoint(filename):
-    checkpoint = torch.load(filename)
+    checkpoint = torch.load(filename, map_location=torch.device('cpu'))
     n_pre = cls.Ann(l_nodes=checkpoint['ann_l_nodes'], active_func=checkpoint['ann_active_func'],
                     drop_p=checkpoint['ann_drop_p'])
 
@@ -201,7 +201,7 @@ def load_checkpoint(filename):
 
 
 def load_checkpoint2(filename):
-    checkpoint = torch.load(filename)
+    checkpoint = torch.load(filename, map_location=torch.device('cpu'))
     n_pre = cls.Ann(l_nodes=checkpoint['ann_l_nodes'], active_func=checkpoint['ann_active_func'],
                     drop_p=checkpoint['ann_drop_p'])
 
